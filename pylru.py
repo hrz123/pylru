@@ -1,4 +1,3 @@
-
 # Cache implementaion with a Least Recently Used (LRU) replacement policy and
 # a basic dictionary interface.
 
@@ -19,7 +18,6 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-
 # The cache is implemented using a combination of a python dictionary (hash
 # table) and a circular doubly linked list. Items in the cache are stored in
 # nodes. These nodes make up the linked list. The list is used to efficiently
@@ -32,10 +30,12 @@
 # lookup of values by key.
 
 import sys
+
 if sys.version_info < (3, 3):
     from collections import Mapping
 else:
     from collections.abc import Mapping
+
 
 # Class for the node objects.
 class _dlnode(object):
@@ -102,7 +102,7 @@ class lrucache(object):
         """Get an item - return default (None) if not present"""
         if key not in self.table:
             return default
-        
+
         return self[key]
 
     def __setitem__(self, key, value):
@@ -191,6 +191,7 @@ class lrucache(object):
             self[key] = value
 
     __defaultObj = object()
+
     def pop(self, key, default=__defaultObj):
         if key in self.table:
             value = self.peek(key)
@@ -318,7 +319,6 @@ class lrucache(object):
             node = node.next
 
 
-
 class WriteThroughCacheManager(object):
     def __init__(self, store, size):
         self.store = store
@@ -392,7 +392,6 @@ class WriteThroughCacheManager(object):
 
     def items(self):
         return self.store.items()
-
 
 
 class WriteBackCacheManager(object):
@@ -553,7 +552,9 @@ def lruwrap(store, size, writeback=False):
     else:
         return WriteThroughCacheManager(store, size)
 
+
 import functools
+
 
 class lrudecorator(object):
     def __init__(self, size, callback=None):

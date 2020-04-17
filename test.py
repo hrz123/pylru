@@ -1,6 +1,7 @@
+import random
 
 from pylru import *
-import random
+
 
 # This tests PyLRU by fuzzing it with random operations, then checking the
 # results against another, simpler, LRU cache implementation.
@@ -21,7 +22,6 @@ class simplelrucache:
 
         return False
 
-
     def __getitem__(self, key):
 
         for i in range(len(self.cache)):
@@ -32,7 +32,6 @@ class simplelrucache:
                 return x[1]
 
         raise KeyError
-
 
     def __setitem__(self, key, value):
 
@@ -48,7 +47,6 @@ class simplelrucache:
             self.cache = self.cache[1:]
 
         self.cache.append([key, value])
-
 
     def __delitem__(self, key):
 
@@ -67,7 +65,6 @@ class simplelrucache:
 
 
 def test(a, b, c, d, verify):
-
     for i in range(1000):
         x = random.randint(0, 512)
         y = random.randint(0, 512)
@@ -115,7 +112,6 @@ def testcache():
         assert list(zip(a.keys(), a.values())) == q2
         assert list(a.keys()) == list(a)
 
-
     a = lrucache(128)
     b = simplelrucache(128)
     verify(a, b)
@@ -138,7 +134,6 @@ def testcache():
 
 
 def wraptest():
-
     def verify(p, x):
         assert p == x.store
         for key, value in x.cache.items():
@@ -159,9 +154,7 @@ def wraptest():
     test(p, x, p, x, verify)
 
 
-
 def wraptest2():
-
     def verify(p, x):
         for key, value in x.store.items():
             if key not in x.dirty:
@@ -191,8 +184,8 @@ def wraptest2():
     x.sync()
     assert p == q
 
-def wraptest3():
 
+def wraptest3():
     def verify(p, x):
         for key, value in x.store.items():
             if key not in x.dirty:
@@ -215,18 +208,18 @@ def wraptest3():
 
 @lrudecorator(100)
 def square(x):
-    return x*x
+    return x * x
+
 
 def testDecorator():
     for i in range(1000):
         x = random.randint(0, 200)
-        assert square(x) == x*x
+        assert square(x) == x * x
 
 
 if __name__ == '__main__':
 
     random.seed()
-
 
     for i in range(20):
         testcache()
@@ -234,5 +227,3 @@ if __name__ == '__main__':
         wraptest2()
         wraptest3()
         testDecorator()
-
-
